@@ -1,0 +1,66 @@
+﻿@page "/cadastrar"
+@using System.Text.Json
+@using System.Text.Json.Serialization;
+@using VagasFast.Data;
+@inject NavigationManager NavManager
+
+
+<label for="usuario">Usuário</label>
+<br />
+<input id="usuario" @bind-value="@UsuarioValor" type="text" />
+<br />
+<label style="margin-top:10px" for="senha">Senha</label>
+<br />
+<input id="senha" @bind-value="@SenhaValor" type="password" />
+<br />
+<label style="margin-top:10px" for="senha">Confirmar Senha</label>
+<br />
+<input id="senha" @bind-value="@ConfirmarValor" type="password" />
+<br />
+<br />
+<button @onclick="enviar">Enviar</button>
+<button @onclick="entrar">Entrar com outro usuário</button>
+<br />
+<span style="color:red" id="mensagem">@Mensagem</span>
+
+
+@code
+    {
+    private string UsuarioValor { get; set; } = "";
+    private string SenhaValor { get; set; } = "";
+    private string ConfirmarValor { get; set; } = "";
+    private string Mensagem { get; set; } = "";
+
+    private void entrar()
+    {
+        NavManager.NavigateTo("/Cadastrar");
+    }
+
+    private async void enviar()
+    {
+        Dictionary<string, string> dados = new Dictionary<string, string>();
+        dados.Add("usuario", UsuarioValor);
+        dados.Add("senha", SenhaValor);
+
+        if(SenhaValor != ConfirmarValor)
+        {
+            Mensagem = "Senhas não coecidem";
+            return;
+        }
+
+        try
+        {
+            var ret = await Api.PostAs<Cadastro>("cadastrar", dados);
+            Mensagem = ret.Mensagem != "Ok" ? ret.Mensagem : "";
+            if(ret.Criado)NavManager.NavigateTo("/Login");
+
+        }
+        catch (Exception)
+        {
+            Mensagem = "Não foi possível conectar ao servidor, tente novamente mais tarde.";
+        }
+
+
+    }
+}
+

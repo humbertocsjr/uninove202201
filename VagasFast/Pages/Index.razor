@@ -1,0 +1,28 @@
+﻿@page "/"
+@using VagasFast.Data
+@inject NavigationManager NavManager
+
+
+
+<h1>VagasFast</h1>
+
+Bem vindo a esta plataforma de compartilhamento de Vagas.
+<br />
+<br />
+<button @onclick="abrirBuscar">
+    Buscar Vagas na Região
+</button>
+
+@code
+{
+
+    private void abrirBuscar()
+    {
+        if(!Api.TokenExiste)
+        {
+            NavManager.NavigateTo("/Login");
+            return;
+        }
+        NavManager.NavigateTo("/Buscar");
+    }
+}

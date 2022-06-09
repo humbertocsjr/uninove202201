@@ -1,0 +1,60 @@
+﻿@page "/login"
+@using System.Text.Json
+@using System.Text.Json.Serialization;
+@using VagasFast.Data;
+@inject NavigationManager NavManager
+
+
+<label for="usuario">Usuário</label>
+<br />
+<input id="usuario" @bind-value="@UsuarioValor" type="text" />
+<br />
+<label style="margin-top:10px" for="senha">Senha</label>
+<br />
+<input id="senha" @bind-value="@SenhaValor" type="password" />
+<br />
+<br />
+<button @onclick="entrar">Entrar</button>
+<button @onclick="cadastrar">Cadastrar</button>
+<br />
+<span style="color:red" id="mensagem">@Mensagem</span>
+
+
+@code
+    {
+    private string UsuarioValor { get; set; } = "";
+    private string SenhaValor { get; set; } = "";
+    private string Mensagem { get; set; } = "";
+
+    private void cadastrar()
+    {
+        NavManager.NavigateTo("/Cadastrar");
+    }
+
+    private async void entrar()
+    {
+        Dictionary<string, string> dados = new Dictionary<string, string>();
+        dados.Add("usuario", UsuarioValor);
+        dados.Add("senha", SenhaValor);
+
+        NavManager.NavigateTo("/Buscar");return;
+
+        try
+        {
+            var ret = await Api.PostAs<VagasFast.Data.Login>("login", dados);
+            Mensagem = ret.Mensagem != "Ok" ? ret.Mensagem : "";
+            if(ret.Mensagem == "Ok")
+            {
+                Api.Token = ret.Chave;
+                NavManager.NavigateTo("/Buscar");
+            }
+        }
+        catch (Exception)
+        {
+            Mensagem = "Não foi possível conectar ao servidor, tente novamente mais tarde.";
+        }
+
+
+    }
+}
+
