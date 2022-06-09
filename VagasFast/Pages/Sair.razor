@@ -1,0 +1,19 @@
+﻿@page "/sair"
+@using VagasFast.Data
+@inject NavigationManager NavManager
+Confirma que deseja sair?
+<button @onclick="sim">Sim</button>
+<button @onclick="nao">Não</button>
+
+@code{
+    void sim()
+    {
+        Api.Token = "";
+        NavManager.NavigateTo("/");
+    }
+    void nao()
+    {
+        NavManager.NavigateTo("/");
+    }
+}
+

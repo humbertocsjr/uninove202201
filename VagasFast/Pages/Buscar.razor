@@ -1,21 +1,42 @@
 ﻿@page "/Buscar"
-@using VagasFast.Data 
+@using VagasFast.Data
 @inherits BuscarBase
+
+@inject NavigationManager NavManager
 @{
 }
 
 
-<h1>Map</h1>
+<h1>Vaga</h1>
 
-<div id="mapa" style="position:relative; width: 100%; height: 70vh;"></div>
+<button @onclick="anterior">Anterior</button>
+<button @onclick="proximo">Proximo</button>
+
+<div id="mapa" style="position:relative; width: 100%; height: 50vh;"></div>
 
 <br />
-<div>Solicitar vaga:</div>
+<div>Descreva como vai utilizar a vaga: (Horarios, Quantas pessoas vão utilizar, Quantos carros, etc)</div>
+<input id="descricao" @bind-value="DescricaoValor" />
+<button @onclick="solicitar">Solicitar Proposta</button>
+<span style="color:red" id="mensagem">@Mensagem</span>
 
 
 @code
 {
 
+
+    async void solicitar()
+    {
+        Dictionary<string, string> dados = new Dictionary<string, string>();
+        dados.Add("msg", DescricaoValor);
+        dados.Add("chave", Api.Token);
+        Mensagem = "Solicitando . . .";
+        var ret = await Api.PostAs<Solicitar>("/solicitar/" + vagas[pos].Id, dados);
+        if(ret.Solicitada)
+            NavManager.NavigateTo("/sucesso");
+        Mensagem = ret.Mensagem;
+
+    }
 
 
 

@@ -64,10 +64,17 @@ build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.RelativePath = 
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/humberto/Projects/VagasFast/VagasFast/Pages/NovaVaga.razor]
+[/Users/humberto/Projects/VagasFast/VagasFast/Pages/Sair.razor]
 build_metadata.AdditionalFiles.GenKind = 
 build_metadata.AdditionalFiles.ManifestResourceName = 
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTm92YVZhZ2EucmF6b3I=
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2Fpci5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/humberto/Projects/VagasFast/VagasFast/Pages/Sucesso.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU3VjZXNzby5yYXpvcg==
 build_metadata.AdditionalFiles.RelativePath = 
 build_metadata.AdditionalFiles.CssScope = 
 

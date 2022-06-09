@@ -9,6 +9,10 @@
 <br />
 <input id="usuario" @bind-value="@UsuarioValor" type="text" />
 <br />
+<label for="email">E-mail</label>
+<br />
+<input id="email" @bind-value="@EmailValor" type="text" />
+<br />
 <label style="margin-top:10px" for="senha">Senha</label>
 <br />
 <input id="senha" @bind-value="@SenhaValor" type="password" />
@@ -27,6 +31,7 @@
 @code
     {
     private string UsuarioValor { get; set; } = "";
+    private string EmailValor { get; set; } = "";
     private string SenhaValor { get; set; } = "";
     private string ConfirmarValor { get; set; } = "";
     private string Mensagem { get; set; } = "";
@@ -41,8 +46,9 @@
         Dictionary<string, string> dados = new Dictionary<string, string>();
         dados.Add("usuario", UsuarioValor);
         dados.Add("senha", SenhaValor);
+        dados.Add("email", EmailValor);
 
-        if(SenhaValor != ConfirmarValor)
+        if (SenhaValor != ConfirmarValor)
         {
             Mensagem = "Senhas não coecidem";
             return;
@@ -52,7 +58,7 @@
         {
             var ret = await Api.PostAs<Cadastro>("cadastrar", dados);
             Mensagem = ret.Mensagem != "Ok" ? ret.Mensagem : "";
-            if(ret.Criado)NavManager.NavigateTo("/Login");
+            if (ret.Criado) NavManager.NavigateTo("/Login");
 
         }
         catch (Exception)

@@ -82,5 +82,13 @@
 	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 	  </RazorComponent>
+	  <RazorComponent Update="Pages\Sucesso.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </RazorComponent>
+	  <RazorComponent Update="Pages\Sair.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </RazorComponent>
 	</ItemGroup>
 </Project>

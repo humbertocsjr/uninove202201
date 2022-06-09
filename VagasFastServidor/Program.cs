@@ -11,12 +11,12 @@ var app = builder.Build();
 
 await CriaDbSeNaoExiste(app.Services, app.Logger);
 
-app.MapPost("/cidade/{cidade}",  (string cidade, VagasDbContext bd) => 
+app.MapPost("/vagas",( double latitude, double longitude,  VagasDbContext bd) => 
 
-    bd.Vagas.Where(v => v.Disponivel & v.Cidade == cidade).ToList()
+    bd.Vagas.Where(v => v.Disponivel & v.Latitude >= (decimal)(latitude - 0.1) & v.Latitude <= (decimal)(latitude + 0.1) & v.Longitude >= (decimal)(longitude - 0.1) & v.Longitude <= (decimal)(longitude + 0.1)).Select(v => new { Id = v.Id, Latitude = v.Latitude, Longitude = v.Longitude }).ToList()
 );
 
-app.MapPost("/solicitar/{id}", (int id, string chave, VagasDbContext bd) =>
+app.MapPost("/solicitar/{id}", (int id, string chave, string msg, VagasDbContext bd) =>
 {
     Validar(chave, bd);
     var sessaoCons = bd.Sessoes.Where(s => s.Chave == Guid.Parse(chave));
@@ -37,7 +37,8 @@ app.MapPost("/solicitar/{id}", (int id, string chave, VagasDbContext bd) =>
         VagaId = vaga.Id,
         Fim = DateTime.MinValue,
         Inicio = DateTime.Now,
-        Status = StatusAluguel.Pendente
+        Status = StatusAluguel.Pendente,
+        Solicitacao = msg
     };
     bd.Alugueis.Add(aluguel);
     
@@ -59,7 +60,7 @@ app.MapPost("/login", (string usuario, string senha, VagasDbContext bd) =>
     return new {Mensagem = "Usuário e/ou senha inválidos", Chave = ""}!;
 });
 
-app.MapPost("/cadastrar", (string usuario, string senha, VagasDbContext bd) =>
+app.MapPost("/cadastrar", (string usuario, string senha, string email, VagasDbContext bd) =>
 {
     if (bd.Usuarios.Any(u => u.Login == usuario)) 
         return new { Mensagem = "Usuário já existe", Criado = false };
@@ -67,7 +68,8 @@ app.MapPost("/cadastrar", (string usuario, string senha, VagasDbContext bd) =>
     var u = new Usuario
     {
         Login = usuario,
-        Senha = senha
+        Senha = senha,
+        Email = email
     };
     bd.Usuarios.Add(u);
     bd.SaveChanges();
@@ -96,6 +98,8 @@ async Task CriaDbSeNaoExiste(IServiceProvider servicos, ILogger log)
     using var db = servicos.CreateScope().ServiceProvider.GetRequiredService<VagasDbContext>();
     await db.Database.EnsureCreatedAsync();
     await db.Database.MigrateAsync();
+
+    
 }
 
 class Sessao
@@ -113,8 +117,9 @@ class Sessao
 
 class Usuario
 {
-    public int Id {get;set;}
-    [Required]public string? Login{get;set;}
+    public int Id {get;set; }
+    [Required] public string? Login { get; set; }
+    [Required] public string? Email { get; set; }
     [Required]public string? Senha{get;set;}
 
     public ICollection<Sessao>? Sessoes{get;set;}
@@ -141,7 +146,8 @@ class Vaga
     [Required] public string? Cidade {get;set;}
     [Required] public decimal? Latitude {get;set;}
     [Required] public decimal? Longitude {get;set;}
-    [Required] public bool Disponivel { get; set; } 
+    [Required] public bool Disponivel { get; set; }
+    [Required] public double Valor { get; set; }
 
     public ICollection<Aluguel>? Alugueis {get;set;}
 
@@ -164,6 +170,7 @@ class Aluguel
     [Required] public DateTime? Inicio{get;set;}
     [Required] public DateTime? Fim{get;set;}
     [Required] public StatusAluguel? Status { get; set; }
+    [Required] public string? Solicitacao { get; set; }
 }
 
 class VagasDbContext : DbContext

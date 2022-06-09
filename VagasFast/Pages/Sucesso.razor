@@ -1,0 +1,28 @@
+﻿@page "/sucesso"
+@using System.Text.Json
+@using System.Text.Json.Serialization;
+@using VagasFast.Data;
+@inject NavigationManager NavManager
+
+<h1>Parabéns! Sua vaga foi solicitada ao proprietário.</h1>
+<br />
+Aguarde a resposta do proprietário por e-mail.
+<br />
+<br />
+O proprietário tem até 2 dias úteis para responder.
+<button @onclick="voltar">Voltar</button>
+
+
+@code
+{
+
+
+    void voltar()
+    {
+        NavManager.NavigateTo("/buscar");
+    }
+}
+
+
+            
+
